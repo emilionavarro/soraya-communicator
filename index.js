@@ -1,4 +1,4 @@
-// require('./config.js');  //Set environment variables
+require('./config.js');  //Set environment variables
 
 console.log("Starting express...");
 var express = require('express');
