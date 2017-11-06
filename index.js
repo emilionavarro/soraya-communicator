@@ -1,11 +1,18 @@
 // require('./config.js');  //Set environment variables
+
+console.log("Starting express...");
 var express = require('express');
 var app = express();
+
+console.log("Starting twilio...");
 var client = require('twilio')(process.env.TWILIO_ID, process.env.TWILIO_AUTH_TOKEN);
 var MessagingResponse = require('twilio').twiml.MessagingResponse;
+
+console.log("Starting mongodb...");
 var MongoClient = require('mongodb').MongoClient;
 var DB = void 0;
 
+console.log("Starting setting port...");
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 
