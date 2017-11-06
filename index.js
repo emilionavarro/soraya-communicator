@@ -1,4 +1,4 @@
-require('./config.js');
+// require('./config.js');  //Set environment variables
 var express = require('express');
 var app = express();
 var client = require('twilio')(process.env.TWILIO_ID, process.env.TWILIO_AUTH_TOKEN);
@@ -27,12 +27,18 @@ app.post('/sms', (req, res) => {
 //-----------------------------------------
 
 function handleNewMessage() {
-  var collection = DB.collection('onboards');
+  var collection = DB.collection('expenditures');
   
   getLastMessage(message => {
-    console.log(lastMessage.body);
+    console.log(message.body);
+    var document = collection.insertOne({
+      body: message.body,
+      sid: message.sid,
+      to: message.to,
+      from: message.from,
+      dateSent: message.dateSent
+    });
   });
-
 }
 
 function getLastMessage(callback) {
@@ -46,7 +52,7 @@ function getLastMessage(callback) {
     // data.forEach(function(message) {
     //   console.log(message.body);
     // });
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       callback(data[0]);
     } else {
       return null;
@@ -70,7 +76,7 @@ function openConnection(callback) {
   
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
-    console.log("Database created!");
+    console.log("Connected to DB.");
     if (callback)
       callback(db);
   });
